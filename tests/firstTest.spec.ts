@@ -26,7 +26,7 @@ test.beforeEach(async({page})=>{
 test.describe('test suite 1', ()=>{
 
 
-test('first test', async({page})=>{
+test.skip('first test', async({page})=>{
 
 
      //await page.goto('http://localhost:4200/');
@@ -36,11 +36,56 @@ test('first test', async({page})=>{
 
 });
 
-test('datepicker test', async({page})=>{ 
+test.skip('datepicker test', async({page})=>{ 
 
 await page.getByText('Datepicker').click();
 
 })
 
+test.only('locator practice', async({page})=>{
+  await page.getByRole('link',{name:'Form Layouts'}).click();
+  //page.locator('locator').action()
+//using tag name
+//  await page.locator('tagname' ,{}).action
+//using text
+//await page.locator('text=some text' ,{}).fill
+//using exact text
+//await page.locator('text="exact text"' ,{}).fill
+//using id
+//await page.locator('#id' ,{})  
+//using class name
+//await page.locator('.className' ,{})
+//using attribute   
+//await page.locator('[attribute="value"]' ,{})
+//using combination of attributes
+//await page.locator('[attribute1="value"][attribute2="value"]' ,{})
+//by full class value
+//await page.locator('[class="class value"]' ,{})
+//using contains text   
+//await page.locator('tagname:has-text("text")' ,{})
+//using child to parent
+//await page.locator('tagname:has-text("text") >> ..' ,{})
+//using nth index
+//await page.locator('tagname' ,{}).nth(1)  // 0 based index
+//using first
+//await page.locator('tagname' ,{}).first()
+//using last
+//await page.locator('tagname' ,{}).last()  
+// by partial text
+//await page.locator('text=partialtext' ,{})
+// await page.locator(':text("sign in")').click()  
+
+//by exact text 
+// await page.locator('text-is("login button")')    
+
+
+
+
+
+await page.locator('input[id="inputEmail1"]').fill('Bhakha@bhakha.com')
+
 });
 
+
+
+});// describe block ends here
