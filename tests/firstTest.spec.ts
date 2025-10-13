@@ -79,10 +79,7 @@ test.only('locator practice', async({page})=>{
 // await page.locator('text-is("login button")')    
 
 
-
-
-
-await page.locator('input[id="inputEmail1"]').fill('Bhakha@bhakha.com')
+//await page.locator('input[id="inputEmail1"]').fill('Bhakha@bhakha.com')
 
 });
 
