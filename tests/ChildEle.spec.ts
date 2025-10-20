@@ -35,6 +35,19 @@ await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('textbox'
 
 await page.locator('#exampleInputEmail1').fill('test@test.com');
 await page.locator('#exampleInputPassword1').fill('Welcome123');
-await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('button',{name:'SUBMIT'}).click();
+//await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('button',{name:'SUBMIT'}).click();  OR 
+
+await page.locator('nb-card',{hasText :'Basic form'}).getByRole('button',{name:'SUBMIT'}).click();
+
+// extracting single text value
+const buttontxt= await page.locator('nb-card',{hasText :'Basic form'}).locator('button').textContent();
+console.log(buttontxt);
+
+await expect(buttontxt).toEqual('Submit');
+
+//lets try to capture multiple values like text in all radio buttons
+
+const radiotxt= await page.locator('nb-radio-group').allTextContents();
+
 
 });
