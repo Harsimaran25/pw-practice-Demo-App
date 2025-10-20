@@ -15,6 +15,11 @@ export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
    //timeout:40000, // 40 seconds
+   //global timeout - time limit of the whole test run by default no timeout
+   //test timeout - time limit for the single test default 30 sec
+   // action timeout - time limit for the action command like click(), fill etc default no timeout
+   //navigation timeout - time limit for like page.goto default no timeout 
+   //expect timeout - time limit for expect locator assertions by default 5 secs
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
