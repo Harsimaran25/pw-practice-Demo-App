@@ -22,6 +22,12 @@ test('autowait and flakiness troubleshoot demo', async({page})=>{
 await Successbtn.waitFor({state:'attached'});// this will trouble shoot for flakiness 
 const ASuccessbtntxt= await Successbtn.allTextContents(); // without using line 22 code it will return empty array
 console.log(ASuccessbtntxt);
+expect(ASuccessbtntxt).toContain('Data loaded with AJAX get request.')
+
+//locator assertion
+
+await expect(Successbtn).toHaveText('Data loaded with AJAX get request.',{timeout:20000}); //added timeout of 20 secs
+
 });
 
 // //Rewritten Version Using Assertions (No Flakiness):
