@@ -33,4 +33,8 @@ await page.getByRole('link',{name:'Form Layouts'}).click();
  //other way for line 31 can be below using filter
 await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('textbox',{name:'email'}).click(); 
 
+await page.locator('#exampleInputEmail1').fill('test@test.com');
+await page.locator('#exampleInputPassword1').fill('Welcome123');
+await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('button',{name:'SUBMIT'}).click();
+
 });
