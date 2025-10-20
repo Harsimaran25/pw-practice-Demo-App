@@ -28,5 +28,9 @@ await page.getByRole('link',{name:'Form Layouts'}).click();
    await page.getByText('Option 1').click(); //works good
   await page.getByText('Option 2').click();
 
+ //await page.locator('nb-card',{hasText:'Using the Grid'}).getByRole('textbox',{name:'email'}).click(); 
+
+ //other way for line 31 can be below using filter
+await page.locator('nb-card').filter({hasText:'Basic form'}).getByRole('textbox',{name:'email'}).click(); 
 
 });
