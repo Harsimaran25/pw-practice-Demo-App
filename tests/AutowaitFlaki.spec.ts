@@ -43,3 +43,23 @@ await expect(Successbtn).toHaveText('Data loaded with AJAX get request.',{timeou
 //   // Optionally print if you still want to debug
 //   console.log(await successMsg.textContent());
 // });
+
+
+test.only('alternative waits', async({page})=>{
+// we can use below waits as well to avoid flakiness
+
+//wait for element 
+// await page.waitForSelector('.bg-success');
+// //assertion
+// await expect(page.locator('.bg-success')).toHaveText('Data loaded with AJAX get request.')
+
+
+//now we could also using API response , wait for particular response to avoid flaki
+// from network tab in network requests 
+await page.waitForResponse('http://uitestingplayground.com/ajaxdata');
+
+const ASuccessbtntxt1= await page.locator('.bg-success').allTextContents(); 
+console.log(ASuccessbtntxt1);
+expect(ASuccessbtntxt1).toContain('Data loaded with AJAX get request.')
+
+});
