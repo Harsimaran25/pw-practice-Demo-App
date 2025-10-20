@@ -45,7 +45,7 @@ await expect(Successbtn).toHaveText('Data loaded with AJAX get request.',{timeou
 // });
 
 
-test.only('alternative waits', async({page})=>{
+test('alternative waits', async({page})=>{
 // we can use below waits as well to avoid flakiness
 
 //wait for element 
@@ -63,3 +63,4 @@ console.log(ASuccessbtntxt1);
 expect(ASuccessbtntxt1).toContain('Data loaded with AJAX get request.')
 
 });
+
