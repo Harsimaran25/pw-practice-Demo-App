@@ -15,9 +15,8 @@ export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
 timeout:40000,
-  expect: {
-    timeout: 30000,
-  },
+  expect: {    timeout: 30000  },
+  //retries:1,
    //timeout:40000, // 40 seconds -- 
    
    //global timeout - time limit of the whole test run by default no timeout
@@ -43,6 +42,7 @@ timeout:40000,
      
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
+   // trace:'on',
    // ignoreHTTPSErrors:true
    //permissions:['geolocation'] //Allow this test to use the Geolocation API
    screenshot:'only-on-failure',
