@@ -52,11 +52,20 @@ timeout:40000,
       
       use: { ...devices['Desktop Chrome'] },
     },
-
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
+    {
+      name:'webkit',
+      use:{
+          browserName:'webkit',
+          headless:false,
+          trace:'retain-on-failure'
+      },
+    },
+    {
+      name: 'mobileIOs',
+      use: { ...devices['iPhone 13'] 
+       // headless:false
+      },
+    },
 
     // {
     //   name: 'webkit',

@@ -90,5 +90,6 @@ for( let i=0;i<countcheck;i++){
 
 test('listitems test', async({page})=>{
 
+// locators practice for  some drop downs
 
 })
