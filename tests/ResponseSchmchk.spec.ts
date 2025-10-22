@@ -6,7 +6,8 @@ const fs = require('fs');
 
 test('validate API response matches schema', async ({ request }) => {
   // Load and compile your JSON schema
-  const schema = JSON.parse(fs.readFileSync('./response.schema.json', 'utf-8'));
+  const schema = await fs.readFile('./response.schema.json', 'utf-8');
+  const schemaJS= JSON.parse(schema);
   const ajv = new Ajv();
   const validate = ajv.compile(schema);  //compiles schemas to functions 
 
