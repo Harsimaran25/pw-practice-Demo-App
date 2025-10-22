@@ -43,6 +43,10 @@ timeout:40000,
      
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+   // ignoreHTTPSErrors:true
+   //permissions:['geolocation'] //Allow this test to use the Geolocation API
+   screenshot:'only-on-failure',
+   video:'off'
   },
 
   /* Configure projects for major browsers */
