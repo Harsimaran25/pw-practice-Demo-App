@@ -70,7 +70,15 @@ timeout:40000,
        // headless:false
       },
     },
+    {
+name:'First-2',
+grep:/another test number (1|2)/,
+  testMatch:[
+      '/Smoke.spec.ts'
 
+  ],
+  use: { ...devices['Desktop Chrome'] },
+    },
     // {
     //   name: 'webkit',
     //   use: { ...devices['Desktop Safari'] },

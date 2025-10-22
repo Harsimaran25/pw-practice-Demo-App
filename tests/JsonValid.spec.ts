@@ -1,42 +1,42 @@
-//this is test to see how to use schema validation for   response
-import Ajv from "ajv";
-import{test,request} from'@playwright/test'
+// //this is test to see how to use schema validation for   response
+// import Ajv from "ajv";
+// import{test,request} from'@playwright/test'
 
-//const Ajv=require("ajv")
+// //const Ajv=require("ajv")
 
-test('to validate json response schema')
-const ajv= new Ajv();
+// test('to validate json response schema')
+// const ajv= new Ajv();
 
-// Define your JSON schema
-const schema ={
- type:'Object',
- properties:{
-name:{type:'string'},
-age:{type:'number'}
+// // Define your JSON schema
+// const schema ={
+//  type:'Object',
+//  properties:{
+// name:{type:'string'},
+// age:{type:'number'}
 
- },
-required:['name','age']
-};
-// Use ajv.compile(schema) to get a validator function.
+//  },
+// required:['name','age']
+// };
+// // Use ajv.compile(schema) to get a validator function.
 
-// Call it with your data: validate(data).
+// // Call it with your data: validate(data).
 
-// Check the result and validate.errors if invalid.
+// // Check the result and validate.errors if invalid.
 
-// Use options like allErrors, strict: false for better control.
+// // Use options like allErrors, strict: false for better control.
 
-// Example JSON to validate
-const data = {
-  name: 'John Doe',
-  age: 30,
+// // Example JSON to validate
+// const data = {
+//   name: 'John Doe',
+//   age: 30,
   
-};
+// };
 
-// Compile and validate
-const response = await page.request.get('/api/data');
-const body = await response.json();
+// // Compile and validate
+// const response = await page.request.get('/api/data');
+// const body = await response.json();
 
-const validate = ajv.compile(schema);
-const valid = validate(body);
+// const validate = ajv.compile(schema);
+// const valid = validate(body);
 
-expect(valid, JSON.stringify(validate.errors)).toBe(true);
+// expect(valid, JSON.stringify(validate.errors)).toBe(true);

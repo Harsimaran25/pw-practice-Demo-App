@@ -9,7 +9,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "testuichrome": "npx playwright test UITest.spec.ts --project=chromium"
+    "testuichrome": "npx playwright test UITest.spec.ts --project=chromium",
+    "SmokeTests": "npx playwright test --grep @smoke --project=chromium"
   },
   "overrides": {
     "stylus": "github:stylus/stylus#0.54.5"
