@@ -1,6 +1,6 @@
 //create some smoke tests using test describe
 
-import {test} from'@playwright/test'
+import {test,request} from'@playwright/test'
 
 
 // to run these in parallel we can use like 
@@ -39,3 +39,17 @@ test('another test number 3', async({page})=>{
 });
 
 });
+
+
+
+// test('api', async({request})=>{
+
+
+// const api1= await request.newContext();
+// const resp= await api1.post('annn',{
+
+//     data:decodeJwtPayload,
+//     headers:{}
+// })
+
+// })

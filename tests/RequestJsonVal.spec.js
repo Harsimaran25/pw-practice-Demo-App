@@ -1,5 +1,5 @@
 // // test to validate request body using AJV
-
+//
 // const { test, expect } = require("@playwright/test");
 // const Ajv = require("ajv");
 // const fs = require("fs");
@@ -12,7 +12,8 @@
 // test("should validate outgoing request against schema", async ({ page }) => {
 //   // Intercept the API request
 //   await page.route("**/api/users", async (route, request) => {
-//     const body = JSON.parse(request.postData()); // request.postData() Gets the body of that request and returns body of the request as a string
+//     const body = JSON.parse(request.postData()); // request.postData() Gets the body of that request and returns body of 
+// the request as a string
 
 //     const valid = validateRequestBody(body); /// returns true or false,Validates the data against your schema
 
