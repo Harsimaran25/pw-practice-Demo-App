@@ -83,6 +83,10 @@ test.only('locator practice', async({page})=>{
 
 });
 
+test('Checkboxes', async({page})=>{
+
+     
+})
 
 
 });// describe block ends here

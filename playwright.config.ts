@@ -52,7 +52,8 @@ timeout:40000,
    // ignoreHTTPSErrors:true
    //permissions:['geolocation'] //Allow this test to use the Geolocation API
    screenshot:'only-on-failure',
-   video:'off'
+   video:'off',
+   
   },
 
   /* Configure projects for major browsers */
@@ -62,29 +63,29 @@ timeout:40000,
       
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name:'webkit',
-      use:{
-          browserName:'webkit',
-          headless:false,
-          trace:'retain-on-failure'
-      },
-    },
-    {
-      name: 'mobileIOs',
-      use: { ...devices['iPhone 13'] 
-       // headless:false
-      },
-    },
-    {
-name:'First-2',
-grep:/another test number (1|2)/,
-  testMatch:[
-      '/Smoke.spec.ts'
+    // {
+    //   name:'webkit',
+    //   use:{
+    //       browserName:'webkit',
+    //       headless:false,
+    //       trace:'retain-on-failure'
+    //   },
+    // },
+    // {
+    //   name: 'mobileIOs',
+    //   use: { ...devices['iPhone 13'] 
+    //    // headless:false
+    //   },
+    // },
+//     {
+// name:'First-2',
+// grep:/another test number (1|2)/,
+//   testMatch:[
+//       '/Smoke.spec.ts'
 
-  ],
-  use: { ...devices['Desktop Chrome'] },
-    },
+//   ],
+//   use: { ...devices['Desktop Chrome'] },
+//     },
     // {
     //   name: 'webkit',
     //   use: { ...devices['Desktop Safari'] },

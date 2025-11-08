@@ -10,7 +10,7 @@
 //   const schemaJS= JSON.parse(schema);
 //   const ajv = new Ajv();
 //   const validate = ajv.compile(schema);  //compiles schemas to functions 
-/
+
 //   // Make an API request
 //   const response = await request.get('https://your-api.com/users/1');
 //   expect(response.ok()).toBeTruthy();

@@ -10,7 +10,8 @@
     "ng": "ng",
     "start": "ng serve",
     "testuichrome": "npx playwright test UITest.spec.ts --project=chromium",
-    "SmokeTests": "npx playwright test --grep @smoke --project=chromium"
+    "SmokeTests": "npx playwright test --grep @smoke --project=chromium",
+    "checkboxtest":"npx playwright test UITest.spec.ts --grep checkboxes"
   },
   "overrides": {
     "stylus": "github:stylus/stylus#0.54.5"

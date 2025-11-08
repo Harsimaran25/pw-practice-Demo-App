@@ -10,7 +10,7 @@ test.beforeEach(async({page})=>{
 await page.getByRole('link',{name:'Form Layouts'}).click();
 });
 
-test('UI elements practice',async({page})=>{
+test.skip('UI elements practice',async({page})=>{
 
     const email1= page.locator('nb-card',{hasText:'Using the Grid'}).getByRole('textbox',{name:'Email'});
 
@@ -47,7 +47,8 @@ await expect(UsingGrid.getByText('Option 1')).toBeChecked();
 
 });
 
-test('checkboxes', async({page})=>{
+test.skip('checkboxes', async({page})=>{
+   //npx playwright test UITest.spec.ts --grep 'checkboxes'  will just run this test in the file
     await page.goto('http://localhost:4200/');
 
     await page.waitForLoadState('networkidle');
@@ -63,12 +64,12 @@ test('checkboxes', async({page})=>{
 
 await page.getByText('Hide on click').click();
 await page.getByText('Prevent arising').check();
-
+await page.getByText('Prevent arising').uncheck();
 //lets say you want to check all the check boxes on the page we cud use loop 
 
 
-const allCheckboxes = page.locator('nb-checkbox');
-const countcheck= await page.locator('nb-checkbox').count();
+const allCheckboxes = page.locator("nb-checkbox[type='checkbox']");
+const countcheck= await allCheckboxes.count();
 //we can use for of loop but all() will get all in the array but all() is flaky
 
 // for(let box of await allCheckboxes.all()) //
@@ -82,14 +83,36 @@ const countcheck= await page.locator('nb-checkbox').count();
 
 for( let i=0;i<countcheck;i++){
 
-   await allCheckboxes.nth(i).click();
+   await allCheckboxes.nth(i).check();
+   expect(allCheckboxes.nth(i).isChecked()).toBeTruthy();
 
 }
+
+
 
 });
 
 test('listitems test', async({page})=>{
 
 // locators practice for  some drop downs
+//await page.goto('http://localhost:4200/');
+
+//await page.locator('button.bottom').click();
+await page.getByRole('button',{name:'Light'}).click();
+
+//await page.pause();
+
+ //page.getByRole('list') // can be used when list has UL tag
+ //page.getByRole('listitem')// when the list has LI tag , will get all items in list as array
+
+//await page.locator('.option-list',{hasText:" Cosmic"}).click();
+//await expect(page.getByRole('button',{name:'Cosmic'})).toBeVisible();
+//another way 
+const optionlist= page.locator('nb-option-list nb-option')
+
+//assert options in the dropdown
+await expect(optionlist).toHaveText(['Light','Dark','Cosmic','Corporate'])
+
+  await optionlist.filter({hasText:'Cosmic'}).click();
 
 })
