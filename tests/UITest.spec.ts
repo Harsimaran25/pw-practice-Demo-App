@@ -98,8 +98,8 @@ test('listitems test', async({page})=>{
 //await page.goto('http://localhost:4200/');
 
 //await page.locator('button.bottom').click();
-await page.getByRole('button',{name:'Light'}).click();
-
+//await page.getByRole('button',{name:'Light'}).click();
+const dropdown = page.locator('ngx-header nb-select')
 //await page.pause();
 
  //page.getByRole('list') // can be used when list has UL tag
@@ -109,10 +109,92 @@ await page.getByRole('button',{name:'Light'}).click();
 //await expect(page.getByRole('button',{name:'Cosmic'})).toBeVisible();
 //another way 
 const optionlist= page.locator('nb-option-list nb-option')
-
+//await optionlist.isVisible();
 //assert options in the dropdown
-await expect(optionlist).toHaveText(['Light','Dark','Cosmic','Corporate'])
+// await expect(optionlist).toHaveText(['Light','Dark','Cosmic','Corporate'])
 
-  await optionlist.filter({hasText:'Cosmic'}).click();
+//   await optionlist.filter({hasText:'Cosmic'}).click();
+
+//   //asserttion on background color 
+   const headerlocator= page.locator('nb-layout-header');
+//   await expect(headerlocator).toHaveCSS('background-color','rgb(50, 50, 89)');
+
+  //assert all colors in case you want - then we will create object and put all colors in it 
+
+  const colors={
+   "Light":"rgb(255, 255, 255)",
+   "Cosmic":"rgb(50, 50, 89)",
+   "Dark":"rgb(34, 43, 69)",
+   "Corporate":"rgb(255, 255, 255)"
+  }
+await dropdown.click();
+  for (let color in colors){  //Use for...in when looping over object keys
+
+  await optionlist.filter({hasText:color}).click();
+  await expect(headerlocator).toHaveCSS('background-color',colors[color]);
+
+  if(color != "Corporate"){ //If the current color is not 'Corporate', then click the dropdown again
+// will execute until color is corporate
+  await dropdown.click()
+   
+  } 
+ 
+}
+
+})
+
+//Can implement using array as well :Just an array of names (and look up RGBs separately)
+
+// const colorNames = ["Light", "Cosmic", "Dark", "Corporate"];
+// const colors = {
+//   "Light": "rgb(255, 255, 255)",
+//   "Cosmic": "rgb(50, 50, 89)",
+//   "Dark": "rgb(34, 43, 69)",
+//   "Corporate": "rgb(255, 255, 255)"
+// };
+
+// await dropdown.click();
+
+// for (const color of colorNames) {
+//   await optionlist.filter({ hasText: color }).click();
+//   await expect(headerlocator).toHaveCSS('background-color', colors[color]);
+
+//   if (color === "Dark") {
+//     // Stop once Dark is reached
+//     break;
+//   }
+
+//   if (color !== "Corporate") {
+//     await dropdown.click();
+//   }
+// }
+
+
+//option 2 Array of objects (a bit cleaner)
+// const colors = [
+//   { name: "Light", value: "rgb(255, 255, 255)" },
+//   { name: "Cosmic", value: "rgb(50, 50, 89)" },
+//   { name: "Dark", value: "rgb(34, 43, 69)" },
+//   { name: "Corporate", value: "rgb(255, 255, 255)" }
+// ];
+
+// await dropdown.click();
+//Use for...of when looping over arrays
+// for (const { name, value } of colors) {
+//   await optionlist.filter({ hasText: name }).click();
+//   await expect(headerlocator).toHaveCSS('background-color', value);
+
+//   if (name === "Dark") {
+//     // Exit loop when color is Dark
+//     break;
+//   }
+
+//   if (name !== "Corporate") {
+//     await dropdown.click();
+//   }
+// }
+
+test('toolTips', async({page})=>{
+
 
 })
