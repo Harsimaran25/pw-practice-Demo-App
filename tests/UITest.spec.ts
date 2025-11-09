@@ -196,5 +196,29 @@ await dropdown.click();
 
 test('toolTips', async({page})=>{
 
+//DOM tool tip
+ await page.goto('http://localhost:4200/');
+  await page.waitForLoadState('networkidle');
+   await page.getByText('Modal & Overlays').click();
+ //await page.getByRole('link',{name:'Tooltip'}).click();
+ await page.locator('[title="Tooltip"]').click();
+// await page.waitForLoadState('networkidle');
+console.log(page.url())
+ await expect(page).toHaveURL(/.*\/tooltip/)
+console.log('post expect',page.url())
 
-})
+const toolTipCard= page.locator('nb-card', {hasText:"Tooltip Placements"})
+await toolTipCard.getByRole('button',{name:'TOP'}).hover();
+
+//page.getByRole('tooltip') // this will only work if there is role tooltip created in dom but in our case its not there.
+console.log(await page.locator('nb-tooltip').textContent())
+await expect(page.locator('nb-tooltip')).toHaveText('This is a tooltip');
+
+
+
+});
+
+test('Dialog Boxes', async({page})=>{
+
+
+});
