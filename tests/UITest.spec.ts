@@ -336,7 +336,7 @@ test('Webtables Scenario3_lec40', async ({ page }) => {
   await page.getByRole('textbox',{name:'Age',exact:true}).clear()
 await page.getByRole('textbox',{name:'Age',exact:true}).pressSequentially(age,{delay:300})
  //await page.locator('tbody').waitFor({state:'visible'})
- await page.waitForLoadState('domcontentloaded')
+ //await page.waitForLoadState('domcontentloaded')
 const rows=page.locator('tbody tr')
 await rows.first().waitFor({state:'attached'})
 const countRows= await rows.count()
@@ -347,6 +347,15 @@ for (let i=0;i < countRows;i++){
    await expect(cellvalue).toBeVisible()
   const textvalue=await cellvalue.textContent()
   console.log('text is',textvalue)
+  if(textvalue.includes("No data found"))
+    {
+      console.log("No data found  for age-",age);
+continue
+  }
+  else {
+    console.log('in else')
+   expect(textvalue).toEqual(age)
+  }
 }
   }
   
