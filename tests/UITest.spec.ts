@@ -1,147 +1,136 @@
+import { test, expect } from "@playwright/test";
 
-import {test,expect} from '@playwright/test'
+//test to practice ui elements
 
-//test to practice ui elements 
-
-test.beforeEach(async({page})=>{
-
-    await page.goto('http://localhost:4200/');
-     await page.getByText('Forms').click();
-await page.getByRole('link',{name:'Form Layouts'}).click();
+test.beforeEach(async ({ page }) => {
+  await page.goto("http://localhost:4200/");
+  await page.getByText("Forms").click();
+  await page.getByRole("link", { name: "Form Layouts" }).click();
 });
 
-test.skip('UI elements practice',async({page})=>{
+test.skip("UI elements practice", async ({ page }) => {
+  const email1 = page
+    .locator("nb-card", { hasText: "Using the Grid" })
+    .getByRole("textbox", { name: "Email" });
 
-    const email1= page.locator('nb-card',{hasText:'Using the Grid'}).getByRole('textbox',{name:'Email'});
+  await email1.fill("test@test.com");
+  await email1.clear(); //will clear the textbox of the value entered
 
-    await email1.fill('test@test.com');
-    await email1.clear(); //will clear the textbox of the value entered
+  //we cud also use press sequentially to mimic keyboard entry using delay as well
+  await email1.pressSequentially("test2@test.com");
+  await email1.clear();
 
-    //we cud also use press sequentially to mimic keyboard entry using delay as well
-    await email1.pressSequentially('test2@test.com');
-    await email1.clear();
+  await email1.pressSequentially("test2@test.com", { delay: 100 }); //types slow like a user
 
-       await email1.pressSequentially('test2@test.com',{delay:100}); //types slow like a user
+  //assertion
+  console.log(await email1.inputValue());
+  await expect(email1).toHaveValue("test2@test.com");
 
-       //assertion
-    console.log(await email1.inputValue());
-       await expect(email1).toHaveValue('test2@test.com');
+  // some radio buttons
 
-       // some radio buttons
+  const UsingGrid = page.locator("nb-card", { hasText: "Using the Grid" });
 
-       const UsingGrid= page.locator('nb-card',{hasText:'Using the Grid'});
+  const radiobtn = await UsingGrid.getByText("Option 1").click();
+  //const radiobtn2= await UsingGrid.getByLabel('Option 2').click({force:true});
+  //const radiobtn2= await UsingGrid.getByLabel('Option 2').check({force:true});
 
-       const radiobtn= await UsingGrid.getByText('Option 1').click();
-       //const radiobtn2= await UsingGrid.getByLabel('Option 2').click({force:true});
-//const radiobtn2= await UsingGrid.getByLabel('Option 2').check({force:true});
+  //assertion generic
 
-//assertion generic
+  const radiostatus = await UsingGrid.getByText("Option 1").isChecked(); //ischecked will return true or false
 
- const radiostatus= await UsingGrid.getByText('Option 1').isChecked();//ischecked will return true or false
+  expect(radiostatus).toBeTruthy();
 
-expect(radiostatus).toBeTruthy();
+  //assertion locator based
 
-//assertion locator based
-
-await expect(UsingGrid.getByText('Option 1')).toBeChecked();
-
+  await expect(UsingGrid.getByText("Option 1")).toBeChecked();
 });
 
-test.skip('checkboxes', async({page})=>{
-   //npx playwright test UITest.spec.ts --grep 'checkboxes'  will just run this test in the file
-    await page.goto('http://localhost:4200/');
+test.skip("checkboxes", async ({ page }) => {
+  //npx playwright test UITest.spec.ts --grep 'checkboxes'  will just run this test in the file
+  await page.goto("http://localhost:4200/");
 
-    await page.waitForLoadState('networkidle');
-   await page.getByText('Modal & Overlays').click();
-   await page.getByRole('link',{name:'Toastr'}).click();
-   //await page.getByText('Toastr').click();
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Modal & Overlays").click();
+  await page.getByRole("link", { name: "Toastr" }).click();
+  //await page.getByText('Toastr').click();
 
-    await expect(page.getByText('Toaster configuration')).toBeVisible();
-// await page.locator('.ng-star-inserted nb-card-header').waitFor({state:'visible'});
-// let p= await page.locator('.ng-star-inserted nb-card-header').textContent();
-// console.log(p);
-// await expect(page.locator('.ng-star-inserted nb-card-header')).toContainText('Toaster configuration');
+  await expect(page.getByText("Toaster configuration")).toBeVisible();
+  // await page.locator('.ng-star-inserted nb-card-header').waitFor({state:'visible'});
+  // let p= await page.locator('.ng-star-inserted nb-card-header').textContent();
+  // console.log(p);
+  // await expect(page.locator('.ng-star-inserted nb-card-header')).toContainText('Toaster configuration');
 
-await page.getByText('Hide on click').click();
-await page.getByText('Prevent arising').check();
-await page.getByText('Prevent arising').uncheck();
-//lets say you want to check all the check boxes on the page we cud use loop 
+  await page.getByText("Hide on click").click();
+  await page.getByText("Prevent arising").check();
+  await page.getByText("Prevent arising").uncheck();
+  //lets say you want to check all the check boxes on the page we cud use loop
 
+  const allCheckboxes = page.locator("nb-checkbox[type='checkbox']");
+  const countcheck = await allCheckboxes.count();
+  //we can use for of loop but all() will get all in the array but all() is flaky
 
-const allCheckboxes = page.locator("nb-checkbox[type='checkbox']");
-const countcheck= await allCheckboxes.count();
-//we can use for of loop but all() will get all in the array but all() is flaky
+  // for(let box of await allCheckboxes.all()) //
+  //    {
+  //     await box.click();
 
-// for(let box of await allCheckboxes.all()) //
-//    {
-//     await box.click();
+  // }
 
-// }
+  // better way to do is using nth and count
 
-
-// better way to do is using nth and count
-
-for( let i=0;i<countcheck;i++){
-
-   await allCheckboxes.nth(i).check();
-   expect(allCheckboxes.nth(i).isChecked()).toBeTruthy();
-
-}
-
-
-
-});
-
-test('listitems test', async({page})=>{
-
-// locators practice for  some drop downs
-//await page.goto('http://localhost:4200/');
-
-//await page.locator('button.bottom').click();
-//await page.getByRole('button',{name:'Light'}).click();
-const dropdown = page.locator('ngx-header nb-select')
-//await page.pause();
-
- //page.getByRole('list') // can be used when list has UL tag
- //page.getByRole('listitem')// when the list has LI tag , will get all items in list as array
-
-//await page.locator('.option-list',{hasText:" Cosmic"}).click();
-//await expect(page.getByRole('button',{name:'Cosmic'})).toBeVisible();
-//another way 
-const optionlist= page.locator('nb-option-list nb-option')
-//await optionlist.isVisible();
-//assert options in the dropdown
-// await expect(optionlist).toHaveText(['Light','Dark','Cosmic','Corporate'])
-
-//   await optionlist.filter({hasText:'Cosmic'}).click();
-
-//   //asserttion on background color 
-   const headerlocator= page.locator('nb-layout-header');
-//   await expect(headerlocator).toHaveCSS('background-color','rgb(50, 50, 89)');
-
-  //assert all colors in case you want - then we will create object and put all colors in it 
-
-  const colors={
-   "Light":"rgb(255, 255, 255)",
-   "Cosmic":"rgb(50, 50, 89)",
-   "Dark":"rgb(34, 43, 69)",
-   "Corporate":"rgb(255, 255, 255)"
+  for (let i = 0; i < countcheck; i++) {
+    await allCheckboxes.nth(i).check();
+    expect(allCheckboxes.nth(i).isChecked()).toBeTruthy();
   }
-await dropdown.click();
-  for (let color in colors){  //Use for...in when looping over object keys
+});
 
-  await optionlist.filter({hasText:color}).click();
-  await expect(headerlocator).toHaveCSS('background-color',colors[color]);
+test("listitems test", async ({ page }) => {
+  // locators practice for  some drop downs
+  //await page.goto('http://localhost:4200/');
 
-  if(color != "Corporate"){ //If the current color is not 'Corporate', then click the dropdown again
-// will execute until color is corporate
-  await dropdown.click()
-   
-  } 
- 
-}
+  //await page.locator('button.bottom').click();
+  //await page.getByRole('button',{name:'Light'}).click();
+  const dropdown = page.locator("ngx-header nb-select");
+  //await page.pause();
 
-})
+  //page.getByRole('list') // can be used when list has UL tag
+  //page.getByRole('listitem')// when the list has LI tag , will get all items in list as array
+
+  //await page.locator('.option-list',{hasText:" Cosmic"}).click();
+  //await expect(page.getByRole('button',{name:'Cosmic'})).toBeVisible();
+  //another way
+  const optionlist = page.locator("nb-option-list nb-option");
+  //await optionlist.isVisible();
+  //assert options in the dropdown
+  // await expect(optionlist).toHaveText(['Light','Dark','Cosmic','Corporate'])
+
+  //   await optionlist.filter({hasText:'Cosmic'}).click();
+
+  //   //asserttion on background color
+  const headerlocator = page.locator("nb-layout-header");
+  //   await expect(headerlocator).toHaveCSS('background-color','rgb(50, 50, 89)');
+
+  //assert all colors in case you want - then we will create object and put all colors in it
+
+  const colors = {
+    Light: "rgb(255, 255, 255)",
+    Cosmic: "rgb(50, 50, 89)",
+    Dark: "rgb(34, 43, 69)",
+    Corporate: "rgb(255, 255, 255)",
+  };
+  await dropdown.click();
+  for (let color in colors) {
+    //Use for...in when looping over object keys
+
+    await optionlist.filter({ hasText: color }).click();
+    await expect(headerlocator).toHaveCSS("background-color", colors[color]);
+
+    if (color != "Corporate") {
+      //If the current color is not 'Corporate', then click the dropdown again
+      // will execute until color is corporate
+      await dropdown.click();
+    }
+  }
+});
 
 //Can implement using array as well :Just an array of names (and look up RGBs separately)
 
@@ -169,7 +158,6 @@ await dropdown.click();
 //   }
 // }
 
-
 //option 2 Array of objects (a bit cleaner)
 // const colors = [
 //   { name: "Light", value: "rgb(255, 255, 255)" },
@@ -194,31 +182,138 @@ await dropdown.click();
 //   }
 // }
 
-test('toolTips', async({page})=>{
+test("toolTips", async ({ page }) => {
+  //DOM tool tip
+  await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Modal & Overlays").click();
+  //await page.getByRole('link',{name:'Tooltip'}).click();
+  await page.locator('[title="Tooltip"]').click();
+  // await page.waitForLoadState('networkidle');
+  console.log(page.url());
+  await expect(page).toHaveURL(/.*\/tooltip/);
+  console.log("post expect", page.url());
 
-//DOM tool tip
- await page.goto('http://localhost:4200/');
-  await page.waitForLoadState('networkidle');
-   await page.getByText('Modal & Overlays').click();
- //await page.getByRole('link',{name:'Tooltip'}).click();
- await page.locator('[title="Tooltip"]').click();
-// await page.waitForLoadState('networkidle');
-console.log(page.url())
- await expect(page).toHaveURL(/.*\/tooltip/)
-console.log('post expect',page.url())
+  const toolTipCard = page.locator("nb-card", {
+    hasText: "Tooltip Placements",
+  });
+  await toolTipCard.getByRole("button", { name: "TOP" }).hover();
 
-const toolTipCard= page.locator('nb-card', {hasText:"Tooltip Placements"})
-await toolTipCard.getByRole('button',{name:'TOP'}).hover();
+  //page.getByRole('tooltip') // this will only work if there is role tooltip created in dom but in our case its not there.
+  console.log(await page.locator("nb-tooltip").textContent());
+  await expect(page.locator("nb-tooltip")).toHaveText("This is a tooltip");
+});
 
-//page.getByRole('tooltip') // this will only work if there is role tooltip created in dom but in our case its not there.
-console.log(await page.locator('nb-tooltip').textContent())
-await expect(page.locator('nb-tooltip')).toHaveText('This is a tooltip');
+test("Dialog Boxes", async ({ page }) => {
+  // 2 types of dialog box like web dialog box and native browser message dialog box
+
+  await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Modal & Overlays").click();
+  await page.getByRole("link", { name: "Dialog" }).click();
+ console.log(page.url());
+  await expect(page).toHaveURL(/.*\/dialog/);
+  console.log("post expect", page.url());
+
+const openDialog= page.locator('nb-card', {hasText:'Open Dialog'})  
+await openDialog.locator('nb-card-body button',{hasText:'Open Dialog with component'}).click();
+await expect(page.locator('nb-dialog-container')).toBeVisible();
+//  page.on('dialog',dialog=>dialog.accept());//listen for event =dialog
+//  await page.locator('#confirmbtn').click();
+
+await page.locator('Nb-card-footer button').click();
 
 
 
 });
 
-test('Dialog Boxes', async({page})=>{
+test("Dialog Boxes2", async ({ page }) => {
+  // lets see native browser message dialog box
 
+  await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Tables & Data").click();
+  await page.getByRole("link", { name: "Smart Table" }).click();
+ console.log(page.url());
+  await expect(page).toHaveURL(/.*\/smart-table/);
+  console.log("post expect", page.url());
 
+// const tablerow= page.locator('table tr')
+// console.log(await tablerow.filter({hasText:'fat@yandex.ru'}).textContent())
+//set up listener as  playwright by default cancels the dialog box
+ page.on('dialog',dialog=>{
+
+// we can make assertion as well to check dialog box 
+
+expect(dialog.message()).toEqual('Are you sure you want to delete?');
+dialog.accept();
+ });//listen for event =dialog
+
+ await page.getByRole('table').locator('tr',{hasText:'fat@yandex.ru'}).locator('.nb-trash').click();
+
+ //assertion to check it does not exist
+//await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru'); 
+// await tablerow.filter({hasText:'fat@yandex.ru'}).locator('.nb-trash').click();
+
+//better way to assert is check count -- preferred 
+const deletedRow = page.getByRole('table').locator('tr', { hasText: 'fat@yandex.ru' });
+await expect(deletedRow).toHaveCount(0);
+// OR 
+// const row = page.getByRole('table').locator('tr', { hasText: 'fat@yandex.ru' });
+// expect(await row.isVisible()).toBeFalsy();
 });
+
+test('Webtables 1', async({page})=>{
+
+    await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Tables & Data").click();
+  await page.getByRole("link", { name: "Smart Table" }).click();
+ console.log(page.url());
+  await expect(page).toHaveURL(/.*\/smart-table/);
+  console.log("post expect", page.url());
+
+  // how to get row by any text in the table 
+  // do dynamically instead of hardcoding
+  const email='twitter@outlook.com'
+  const agetoUpdate='30'
+const targetrow=page.getByRole('row',{name:email});
+//lets click on pencil icon to edit age of this row
+
+await targetrow.locator('.nb-edit').click()
+
+//await page.locator("input-editor [placeholder='Age']").fill(agetoUpdate)
+await page.locator('input-editor').getByPlaceholder('Age').clear()
+await page.locator('input-editor').getByPlaceholder('Age').fill(agetoUpdate)
+await page.locator('i.nb-checkmark').click();
+
+await expect(targetrow.locator('div.ng-star-inserted' ,{hasText:agetoUpdate})).toContainText(agetoUpdate);
+
+
+})
+
+test('Webtables 1 scenario2', async({page})=>{
+
+// now lets say we want to find row by ID and uniquely identify it as there is no direct way to select column
+// we have to go to row then cell
+ const email1='twitter232@outlook.com'
+ 
+await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Tables & Data").click();
+  await page.getByRole("link", { name: "Smart Table" }).click();
+
+  await page.getByRole('link',{name:'2'}).click();
+
+  //const targetrowbyId= page.getByRole('row',{name:'11'}).filter({has:page.locator('td').nth(1).getByText('11')})
+  //OR 
+  const targetcell = page.locator('tr', {has: page.locator('td').nth(1).getByText('11')})
+  await targetcell.locator('.nb-edit').click()
+
+  await page.locator('input-editor').getByPlaceholder('E-mail').clear()
+await page.locator('input-editor').getByPlaceholder('E-mail').fill(email1)
+await page.locator('i.nb-checkmark').click();
+
+await expect(targetcell.locator('td').nth(5)).toHaveText(email1)
+
+})
