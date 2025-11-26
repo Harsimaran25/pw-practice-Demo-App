@@ -216,16 +216,15 @@ test("Dialog Boxes", async ({ page }) => {
   await expect(page).toHaveURL(/.*\/dialog/);
   console.log("post expect", page.url());
 
-  const openDialog = page.locator('nb-card', { hasText: 'Open Dialog' })
-  await openDialog.locator('nb-card-body button', { hasText: 'Open Dialog with component' }).click();
-  await expect(page.locator('nb-dialog-container')).toBeVisible();
+  const openDialog = page.locator("nb-card", { hasText: "Open Dialog" });
+  await openDialog
+    .locator("nb-card-body button", { hasText: "Open Dialog with component" })
+    .click();
+  await expect(page.locator("nb-dialog-container")).toBeVisible();
   //  page.on('dialog',dialog=>dialog.accept());//listen for event =dialog
   //  await page.locator('#confirmbtn').click();
 
-  await page.locator('Nb-card-footer button').click();
-
-
-
+  await page.locator("Nb-card-footer button").click();
 });
 
 test("Dialog Boxes2", async ({ page }) => {
@@ -242,30 +241,34 @@ test("Dialog Boxes2", async ({ page }) => {
   // const tablerow= page.locator('table tr')
   // console.log(await tablerow.filter({hasText:'fat@yandex.ru'}).textContent())
   //set up listener as  playwright by default cancels the dialog box
-  page.on('dialog', dialog => {
+  page.on("dialog", (dialog) => {
+    // we can make assertion as well to check dialog box
 
-    // we can make assertion as well to check dialog box 
-
-    expect(dialog.message()).toEqual('Are you sure you want to delete?');
+    expect(dialog.message()).toEqual("Are you sure you want to delete?");
     dialog.accept();
-  });//listen for event =dialog
+  }); //listen for event =dialog
 
-  await page.getByRole('table').locator('tr', { hasText: 'fat@yandex.ru' }).locator('.nb-trash').click();
+  await page
+    .getByRole("table")
+    .locator("tr", { hasText: "fat@yandex.ru" })
+    .locator(".nb-trash")
+    .click();
 
   //assertion to check it does not exist
-  //await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru'); 
+  //await expect(page.locator('table tr').first()).not.toHaveText('fat@yandex.ru');
   // await tablerow.filter({hasText:'fat@yandex.ru'}).locator('.nb-trash').click();
 
-  //better way to assert is check count -- preferred 
-  const deletedRow = page.getByRole('table').locator('tr', { hasText: 'fat@yandex.ru' });
+  //better way to assert is check count -- preferred
+  const deletedRow = page
+    .getByRole("table")
+    .locator("tr", { hasText: "fat@yandex.ru" });
   await expect(deletedRow).toHaveCount(0);
-  // OR 
+  // OR
   // const row = page.getByRole('table').locator('tr', { hasText: 'fat@yandex.ru' });
   // expect(await row.isVisible()).toBeFalsy();
 });
 
-test('Webtables 1', async ({ page }) => {
-
+test("Webtables 1", async ({ page }) => {
   await page.goto("http://localhost:4200/");
   await page.waitForLoadState("networkidle");
   await page.getByText("Tables & Data").click();
@@ -274,89 +277,130 @@ test('Webtables 1', async ({ page }) => {
   await expect(page).toHaveURL(/.*\/smart-table/);
   console.log("post expect", page.url());
 
-  // how to get row by any text in the table 
+  // how to get row by any text in the table
   // do dynamically instead of hardcoding
-  const email = 'twitter@outlook.com'
-  const agetoUpdate = '30'
-  const targetrow = page.getByRole('row', { name: email });
+  const email = "twitter@outlook.com";
+  const agetoUpdate = "30";
+  const targetrow = page.getByRole("row", { name: email });
   //lets click on pencil icon to edit age of this row
 
-  await targetrow.locator('.nb-edit').click()
+  await targetrow.locator(".nb-edit").click();
 
   //await page.locator("input-editor [placeholder='Age']").fill(agetoUpdate)
-  await page.locator('input-editor').getByPlaceholder('Age').clear()
-  await page.locator('input-editor').getByPlaceholder('Age').fill(agetoUpdate)
-  await page.locator('i.nb-checkmark').click();
+  await page.locator("input-editor").getByPlaceholder("Age").clear();
+  await page.locator("input-editor").getByPlaceholder("Age").fill(agetoUpdate);
+  await page.locator("i.nb-checkmark").click();
 
-  await expect(targetrow.locator('div.ng-star-inserted', { hasText: agetoUpdate })).toContainText(agetoUpdate);
+  await expect(
+    targetrow.locator("div.ng-star-inserted", { hasText: agetoUpdate })
+  ).toContainText(agetoUpdate);
+});
 
-
-})
-
-test('Webtables 1 scenario2', async ({ page }) => {
-
+test("Webtables 1 scenario2", async ({ page }) => {
   // now lets say we want to find row by ID and uniquely identify it as there is no direct way to select column
   // we have to go to row then cell
-  const email1 = 'twitter232@outlook.com'
+  const email1 = "twitter232@outlook.com";
 
   await page.goto("http://localhost:4200/");
   await page.waitForLoadState("networkidle");
   await page.getByText("Tables & Data").click();
   await page.getByRole("link", { name: "Smart Table" }).click();
 
-  await page.getByRole('link', { name: '2' }).click();
+  await page.getByRole("link", { name: "2" }).click();
 
   //const targetrowbyId= page.getByRole('row',{name:'11'}).filter({has:page.locator('td').nth(1).getByText('11')})
-  //OR 
-  const targetcell = page.locator('tr', { has: page.locator('td').nth(1).getByText('11') })
-  await targetcell.locator('.nb-edit').click()
+  //OR
+  const targetcell = page.locator("tr", {
+    has: page.locator("td").nth(1).getByText("11"),
+  });
+  await targetcell.locator(".nb-edit").click();
 
-  await page.locator('input-editor').getByPlaceholder('E-mail').clear()
-  await page.locator('input-editor').getByPlaceholder('E-mail').fill(email1)
-  await page.locator('i.nb-checkmark').click();
+  await page.locator("input-editor").getByPlaceholder("E-mail").clear();
+  await page.locator("input-editor").getByPlaceholder("E-mail").fill(email1);
+  await page.locator("i.nb-checkmark").click();
 
-  await expect(targetcell.locator('td').nth(5)).toHaveText(email1)
+  await expect(targetcell.locator("td").nth(5)).toHaveText(email1);
+});
 
-})
-
-test('Webtables Scenario3_lec40', async ({ page }) => {
-
+test("Webtables Scenario3_lec40", async ({ page }) => {
   // let say we want to know put some value in table like age column u enter 20 then some rows will be filtered
   // then lets get those rows and find a specific row in them
 
-  const ages=['20','30','300']
+  const ages = ["20", "30", "300"];
   await page.goto("http://localhost:4200/");
-   await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("networkidle");
   await page.getByText("Tables & Data").click();
   await page.getByRole("link", { name: "Smart Table" }).click();
 
+  for (let age of ages) {
+    await page.getByRole("textbox", { name: "Age", exact: true }).clear();
+    await page
+      .getByRole("textbox", { name: "Age", exact: true })
+      .pressSequentially(age, { delay: 300 });
+    //await page.locator('tbody').waitFor({state:'visible'})
+    //await page.waitForLoadState('domcontentloaded')
+    const rows = page.locator("tbody tr");
+    await rows.first().waitFor({ state: "attached" });
+    const countRows = await rows.count();
+    console.log(`rows for ${age} are ,`, countRows);
+    for (let i = 0; i < countRows; i++) {
+      const cellvalue = rows.nth(i).locator("td").last();
+      await expect(cellvalue).toBeVisible();
+      const textvalue = await cellvalue.textContent();
+      console.log("text is", textvalue);
+      if (textvalue.includes("No data found")) {
+        console.log("No data found  for age-", age);
+        continue;
+      } else {
+        console.log("in else");
+        expect(textvalue).toEqual(age);
+      }
+    }
+  }
+});
 
-  for (let age of ages)
-    {
-  await page.getByRole('textbox',{name:'Age',exact:true}).clear()
-await page.getByRole('textbox',{name:'Age',exact:true}).pressSequentially(age,{delay:300})
- //await page.locator('tbody').waitFor({state:'visible'})
- //await page.waitForLoadState('domcontentloaded')
-const rows=page.locator('tbody tr')
-await rows.first().waitFor({state:'attached'})
-const countRows= await rows.count()
-console.log(`rows for ${age} are ,`,countRows)
-for (let i=0;i < countRows;i++){
+// date picker
+test("DatePicker 1", async ({ page }) => {
+  await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Forms").click();
+  await page.getByRole("link", { name: "Datepicker" }).click();
+  await page.getByRole("textbox", { name: "Form Picker" }).click();
+  await page.locator("nb-calendar").waitFor({ state: "visible" });
+  const calendar_test = page.locator("nb-calendar");
+  let day = '17';
+  let month = "DEC";
+  let yearrtopick = "2027";
 
-  const cellvalue= rows.nth(i).locator('td').last()
-   await expect(cellvalue).toBeVisible()
-  const textvalue=await cellvalue.textContent()
-  console.log('text is',textvalue)
-  if(textvalue.includes("No data found"))
-    {
-      console.log("No data found  for age-",age);
-continue
+  let yearCalendar = page.locator(".calendar-navigation");
+  await yearCalendar.click();
+  let yearSelect = page.locator(".year-cell");
+
+  while (true) {
+    const yearrs = await yearSelect.allInnerTexts();
+    console.log(yearrs);
+
+    if (yearrs.includes(yearrtopick)) {
+      await page.locator(".cell-content", { hasText: yearrtopick }).click();
+      await page.locator(".month-cell", { hasText: month }).click();
+      
+    
+
+    await page.waitForTimeout(200)
+
+    let calendardayrows = page.locator("nb-calendar-picker-row");
+    let rowcount = await calendardayrows.count();
+    for (let i = 0; i < rowcount; i++) {
+      let text= await calendardayrows.nth(i).locator("nb-calendar-day-cell").allInnerTexts();
+      console.log('days is',text)
+      if (text.includes(day))
+      {
+        await calendardayrows.nth(i).locator("nb-calendar-day-cell").locator('.day-cell',{hasText:day}).click()
+        break;
+
+      }
+      
+    }
   }
-  else {
-    console.log('in else')
-   expect(textvalue).toEqual(age)
   }
-}
-  }
-  
-})
+});
