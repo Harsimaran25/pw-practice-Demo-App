@@ -359,7 +359,7 @@ test("Webtables Scenario3_lec40", async ({ page }) => {
   }
 });
 
-// date picker
+// date picker - dyanmically1
 test("DatePicker 1", async ({ page }) => {
   await page.goto("http://localhost:4200/");
   await page.waitForLoadState("networkidle");
@@ -367,7 +367,7 @@ test("DatePicker 1", async ({ page }) => {
   await page.getByRole("link", { name: "Datepicker" }).click();
   await page.getByRole("textbox", { name: "Form Picker" }).click();
   await page.locator("nb-calendar").waitFor({ state: "visible" });
-  const calendar_test = page.locator("nb-calendar");
+ 
   let day = "17";
   let month = "DEC";
   let yearrtopick = "2027";
@@ -397,7 +397,7 @@ test("DatePicker 1", async ({ page }) => {
       for (let i = 0; i < rowcount; i++) {
         let dayinrow = await calRows
           .nth(i)
-          .locator("nb-calendar-day-cell")
+          .locator("[class='day-cell ng-star-inserted']")
           .allInnerTexts();
         console.log(dayinrow);
         if (dayinrow.includes(day)) {
@@ -413,3 +413,152 @@ test("DatePicker 1", async ({ page }) => {
     }
   }
 });
+
+
+test('DatePicker 2', async({page})=>{
+
+// select date dynamically 
+
+await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Forms").click();
+  await page.getByRole("link", { name: "Datepicker" }).click();
+  await page.getByRole("textbox", { name: "Form Picker" }).click();
+  await page.locator("nb-calendar").waitFor({ state: "visible" });
+ 
+  let day = "13";
+  let month = "JAN";
+  let yearrtopick = "2037";
+
+  
+
+while(true)
+{
+  
+ let yearCal=page.locator('.calendar-navigation') 
+ await yearCal.click();
+   let yearstext=await page.locator('.year-cell').allInnerTexts()
+   console.log(yearstext)
+  console.log(yearstext[0])
+  console.log(yearstext[yearstext.length-1])
+
+  if (parseInt(yearrtopick) >= parseInt(yearstext[0]) && parseInt(yearrtopick)<= parseInt(yearstext[yearstext.length-1])) {
+ 
+    if(yearstext.includes(yearrtopick)){
+
+    await page.locator(".cell-content", { hasText: yearrtopick }).click();
+     await page.locator(".month-cell", { hasText: month }).click();
+    break;
+  }
+
+
+  }
+  else if(parseInt(yearrtopick) > parseInt(yearstext[yearstext.length - 1]))
+  {
+
+    
+    await page.locator("[data-name='chevron-right']").click()
+    let yearstext=await page.locator('.year-cell').allInnerTexts()
+   console.log(yearstext)
+  console.log(yearstext[0])
+  console.log(yearstext[yearstext.length-1])
+    await page.locator('.year-cell').getByText(yearrtopick).click()
+    await page.locator(".month-cell", { hasText: month }).click();
+   
+    break;
+  }
+  else {
+      await page.locator("[data-name='chevron-left']").click();
+      await page.locator('.year-cell').getByText(yearrtopick).click()
+    await page.locator(".month-cell", { hasText: month }).click();
+//     await page.locator("[class='day-cell ng-star-inserted']").getByText(day).click()
+//       const val=await page.locator("[placeholder='Form Picker']").inputValue()
+// console.log( val)
+    break;
+    }
+
+   
+  
+}
+ await page.locator("[class='day-cell ng-star-inserted']").getByText(day).click()
+    const val=await page.locator("[placeholder='Form Picker']").inputValue()
+console.log( val)
+
+})
+
+//lets optimise the above DatePicker 2 as there is lot of code repeated
+
+test('DatePicker 3 optimised',async({page})=>{
+
+  let target_day = "13";
+  let target_month = "JAN";
+  let target_year = "2025";
+
+await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Forms").click();
+  await page.getByRole("link", { name: "Datepicker" }).click();
+
+await page.getByRole("textbox", { name: "Form Picker" }).click();
+  await page.locator("nb-calendar").waitFor({ state: "visible" });
+
+const nav_calendar={
+  previous: page.locator("[data-name='chevron-left']"),
+  next: page.locator("[data-name='chevron-right']")
+}
+
+ 
+ 
+   
+  
+   const year_Range= async ()=>{
+
+const years_cal=await page.locator('.year-cell').allInnerTexts()
+
+    return{
+
+      years:years_cal,
+      min:parseInt(years_cal[0]),
+      max:parseInt(years_cal[years_cal.length-1])
+    }
+   } 
+    
+while(true){
+   
+  const targetyearInt=parseInt(target_year)
+  const {years, min, max}= await year_Range()
+  
+await page.locator('.calendar-navigation').click()
+
+  if(targetyearInt >= min && targetyearInt <= max){
+  console.log('years are',years)
+  console.log('min year',min)
+     await page.locator(".cell-content", { hasText: target_year}).click();
+     await page.locator(".month-cell", { hasText: target_month }).click();
+    break;
+
+  }
+
+  if(targetyearInt>max){
+console.log('years are',years)
+  console.log('min year',min)
+    await nav_calendar.next.click()
+    continue;
+  }
+
+  if(targetyearInt<min){
+    console.log('years are',years)
+  console.log('min year',min)
+    await nav_calendar.previous.click()
+    continue;
+  }
+
+}//while end
+
+ await page.locator("[class='day-cell ng-star-inserted']").getByText(target_day).click()
+    const val=await page.locator("[placeholder='Form Picker']").inputValue()
+console.log( val)
+   
+
+
+})
