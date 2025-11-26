@@ -368,7 +368,7 @@ test("DatePicker 1", async ({ page }) => {
   await page.getByRole("textbox", { name: "Form Picker" }).click();
   await page.locator("nb-calendar").waitFor({ state: "visible" });
   const calendar_test = page.locator("nb-calendar");
-  let day = '17';
+  let day = "17";
   let month = "DEC";
   let yearrtopick = "2027";
 
@@ -383,24 +383,33 @@ test("DatePicker 1", async ({ page }) => {
     if (yearrs.includes(yearrtopick)) {
       await page.locator(".cell-content", { hasText: yearrtopick }).click();
       await page.locator(".month-cell", { hasText: month }).click();
-      
-    
 
-    await page.waitForTimeout(200)
+      await page.waitForTimeout(200);
+      await expect(page.locator("nb-calendar-day-cell").first()).toBeVisible();
 
-    let calendardayrows = page.locator("nb-calendar-picker-row");
-    let rowcount = await calendardayrows.count();
-    for (let i = 0; i < rowcount; i++) {
-      let text= await calendardayrows.nth(i).locator("nb-calendar-day-cell").allInnerTexts();
-      console.log('days is',text)
-      if (text.includes(day))
-      {
-        await calendardayrows.nth(i).locator("nb-calendar-day-cell").locator('.day-cell',{hasText:day}).click()
-        break;
+      console.log(await page.locator("nb-calendar-day-cell").allTextContents());
 
+      let calRows = page.locator("nb-calendar-picker-row");
+
+      let rowcount = await calRows.count();
+      console.log(rowcount);
+
+      for (let i = 0; i < rowcount; i++) {
+        let dayinrow = await calRows
+          .nth(i)
+          .locator("nb-calendar-day-cell")
+          .allInnerTexts();
+        console.log(dayinrow);
+        if (dayinrow.includes(day)) {
+          await calRows
+            .nth(i)
+            .locator("nb-calendar-day-cell")
+            .filter({ hasText: day })
+            .click();
+        }
       }
-      
+
+      break;
     }
-  }
   }
 });
