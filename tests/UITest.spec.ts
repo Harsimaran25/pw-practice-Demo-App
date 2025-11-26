@@ -490,9 +490,9 @@ console.log( val)
 
 test('DatePicker 3 optimised',async({page})=>{
 
-  let target_day = "13";
-  let target_month = "JAN";
-  let target_year = "2025";
+  let target_day  = "13";
+  let target_month = "Jan";
+  let target_year  = "2025";
 
 await page.goto("http://localhost:4200/");
   await page.waitForLoadState("networkidle");
@@ -555,9 +555,13 @@ console.log('years are',years)
 
 }//while end
 
- await page.locator("[class='day-cell ng-star-inserted']").getByText(target_day).click()
+ await page.locator("[class='day-cell ng-star-inserted']").getByText((target_day).toUpperCase(),{exact:true}).click()
     const val=await page.locator("[placeholder='Form Picker']").inputValue()
 console.log( val)
+
+   expect(val).toContain(target_month);
+  expect(val).toContain(target_day);
+  expect(val).toContain(target_year);
    
 
 
