@@ -649,8 +649,31 @@ await expect(tempcel).toContainText(' 30 ')
 
 test('Sliders Approach 2 better one', async({page})=>{
 
+
+    await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
 // this time we use the approach which mimics real user sliding the slider instead of passing x and y co-ordinates
 //actual mouse movement
-//first define or find area we want to move mouse
+//first define or find area we want to move mouse , we take locator for it
+
+const tempBox=page.locator('[tabtitle="Temperature"] ngx-temperature-dragger')
+
+// now we need to make sure the the area is in view using scrollintoviewifneed method
+await tempBox.scrollIntoViewIfNeeded()
+//now we need to define a boundingbox
+
+const box= await tempBox.boundingBox()
+//find centre of box and then use it to move around
+const x= box.x+box.width/2
+const y = box.y+box.height/2
+console.log(x,y)
+await page.mouse.move(x,y)
+await page.mouse.down() // like holding left button of mouse pressing it down 
+await page.mouse.move(x+100,y)  // x is horizontal y is veritcal 
+await page.mouse.click(x+100,y+80)
+await page.mouse.up()//release left click
+
+await expect(tempBox).toContainText('30')
+
 
 })
