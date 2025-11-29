@@ -566,3 +566,91 @@ console.log( val)
 
 
 })
+
+test('DatePicker 4 lec_42', async({page})=>{
+//dynamically select date using javascript object
+
+//lets use date from javascript
+
+let date1 =new Date();
+console.log(date1)
+console.log(date1.getDate())
+console.log(date1.getFullYear())
+
+
+date1.setDate(date1.getDate() + 100) //100 days from current day
+console.log(date1)
+const expectedDate=date1.getDate().toString();
+const expectedMonth= date1.toLocaleString('En-US',{month:'short'})
+console.log(expectedMonth)
+
+const expectedMonthLong=date1.toLocaleString('En-US',{month:'long'})
+console.log(expectedMonthLong)
+const expectedYear=date1.getFullYear();
+
+
+await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+  await page.getByText("Forms").click();
+  await page.getByRole("link", { name: "Datepicker" }).click();
+const calValue= page.getByRole("textbox", { name: "Form Picker" })
+await page.getByRole("textbox", { name: "Form Picker" }).click();
+  await page.locator("nb-calendar").waitFor({ state: "visible" });
+ // await page.locator('.calendar-navigation').click()
+
+//await page.locator(".cell-content", { hasText: target_year.toString()}).click();
+
+let CalMonYear=await page.locator('nb-calendar-view-mode').textContent()
+console.log(CalMonYear)
+const expectedMonthandYear=` ${expectedMonthLong} ${expectedYear} `
+console.log(expectedMonthandYear)
+
+const dateToAssert=`${expectedMonth} ${expectedDate}, ${expectedYear}`
+
+while(!CalMonYear.includes(expectedMonthandYear))
+  {
+
+await page.locator("[data-name='chevron-right']").click()
+ CalMonYear=await page.locator('nb-calendar-view-mode').textContent()
+}
+
+await page.locator("[class='day-cell ng-star-inserted']").getByText(expectedDate,{exact:true}).click()
+
+await expect(calValue).toHaveValue(dateToAssert)
+})
+
+
+
+
+
+
+//sliders webelement
+
+test('Sliders Test approach 1', async({page})=>{
+
+  //updating slider attributes like cx and cy - coordinates /pixels - this approach is not simulation of mouse
+  await page.goto("http://localhost:4200/");
+  await page.waitForLoadState("networkidle");
+
+  const tempGuage=page.locator("[tabtitle='Temperature'] ngx-temperature-dragger circle")
+// now to get those x and y coordinates// so using locator.evaluate
+
+await tempGuage.evaluate( xy=>{
+
+  xy.setAttribute('cx','230.836')// set for 30 degress
+  xy.setAttribute('cy','230.836')
+})
+
+const tempcel= page.locator('.value.temperature')
+await tempGuage.click() // so that browser can register change and change value to 30 cel
+await expect(tempcel).toContainText(' 30 ')
+
+})
+
+test('Sliders Approach 2 better one', async({page})=>{
+
+// this time we use the approach which mimics real user sliding the slider instead of passing x and y co-ordinates
+//actual mouse movement
+//first define or find area we want to move mouse
+
+})
