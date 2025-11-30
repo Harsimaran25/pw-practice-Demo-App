@@ -220,6 +220,7 @@ test("Dialog Boxes", async ({ page }) => {
   await openDialog
     .locator("nb-card-body button", { hasText: "Open Dialog with component" })
     .click();
+    
   await expect(page.locator("nb-dialog-container")).toBeVisible();
   //  page.on('dialog',dialog=>dialog.accept());//listen for event =dialog
   //  await page.locator('#confirmbtn').click();
