@@ -2,6 +2,7 @@
 
 
 //npx playwright test secondtestPom.spec.ts --ui     
+// lec 49 parametrised test
 
 import{test,expect} from '@playwright/test'
 
