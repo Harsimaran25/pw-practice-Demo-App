@@ -1,6 +1,6 @@
 ////lec 49  this is  forms layout page  using pom
 
-
+// to run use -- npx playwright test secondtestPom.spec.ts --ui
 //npx playwright test secondtestPom.spec.ts --ui     
 // lec 49 parametrised test
 
@@ -22,4 +22,6 @@ test('formsLayout page using pom', async({page})=>{
     await expect(page.getByText('Using the Grid', { exact: true }) ).toBeVisible({timeout:300})
 
     await formPage.submitfromGrid('abc@cc.com','Bhakha','option 2')
+
+    await formPage.inlineFormSubmit('Bhakhain','bhakha1@123.com',true)
 })
