@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { popup } from "leaflet";
-
+ //const { test, expect } = require('@playwright/test');
 //lec 44 artem bondar
 
 test("Drag&Drop test 1 lec 44", async ({ page }) => {

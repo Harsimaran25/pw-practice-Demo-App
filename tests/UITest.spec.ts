@@ -26,6 +26,7 @@ test.skip("UI elements practice", async ({ page }) => {
   //assertion
   console.log(await email1.inputValue());
   await expect(email1).toHaveValue("test2@test.com");
+  await expect.soft(email1).toHaveValue('test2@test.com')
 
   // some radio buttons
 

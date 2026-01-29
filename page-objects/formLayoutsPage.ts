@@ -67,3 +67,26 @@ await this.inlineRememberMe.check({force:true});
 }
 
 } //class end
+
+
+
+/**
+ *  export class formlayout2 {
+ * 
+ *  private readonly page: Page;
+ * 
+ * constructor( page: Page){
+ * this.page=page
+ * }
+ * 
+ * //method
+ *  
+ *  async submitUsingTheGridFormWithCredentialsAndSelectOptions( email:string, password: string, optiontext: string) {
+ * 
+ *  const usingthegrid= this.page.locator('nb-card',{hasText:'Using the Grid'})
+ * 
+ * }
+ * 
+ * }
+ * 
+ */
